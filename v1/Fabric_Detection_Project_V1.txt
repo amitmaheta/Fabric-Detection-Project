@@ -1,5 +1,5 @@
 
-Fabric Detection Prototype - Challenge 2 (Version 1)
+Fabric Detection Prototype - (Version 1)
 ---------------------------------------------------
 
 Project Objective:
