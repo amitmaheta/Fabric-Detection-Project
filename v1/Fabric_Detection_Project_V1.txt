@@ -1,0 +1,100 @@
+
+Fabric Detection Prototype - Challenge 2 (Version 1)
+---------------------------------------------------
+
+Project Objective:
+Design and prototype a sensor system to detect fabric presence, thickness, and wrinkles using an ultrasonic sensor and an IR emitter/receiver module.
+
+Steps Followed:
+
+1. Sensor Selection
+   - Chose Ultrasonic Sensor (HC-SR04) for measuring distance (to detect distance and surface changes).
+   - Used IR Emitter + IR Receiver modules to detect reflected light from fabric (to determine presence and texture).
+
+2. Hardware Setup
+   - Used Arduino Uno, one breadboard, jumper wires, and power from USB.
+   - Placed IR emitter and receiver side-by-side on the breadboard.
+   - Mounted HC-SR04 facing forward on the same breadboard, aligned with fabric target zone.
+
+3. Wiring
+   - IR Emitter:
+       + pin -> Arduino Digital Pin 7
+       - pin -> GND
+   - IR Receiver:
+       R (VCC) -> 5V
+       G (GND) -> GND
+       Y (Signal) -> A0
+   - HC-SR04:
+       VCC -> 5V
+       GND -> GND
+       TRIG -> D9
+       ECHO -> D10
+
+4. Code Development
+   - Built modular Arduino code to:
+       • Read IR sensor analog values
+       • Measure distance via ultrasonic sensor
+       • Analyze readings to detect fabric type
+
+5. Testing
+   - Verified sensor outputs on Serial Monitor
+   - Used different fabric types to confirm working
+   - Wrinkles and thickness altered distance and reflection values accurately
+
+------------------
+Final Arduino Code:
+------------------
+
+const int irLedPin = 7;
+const int irReceiverPin = A0;
+const int trigPin = 9;
+const int echoPin = 10;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(irLedPin, OUTPUT);
+  digitalWrite(irLedPin, HIGH);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+}
+
+void loop() {
+  int irValue = readIRSensor();
+  float distance = readUltrasonic();
+
+  Serial.print("IR Value: ");
+  Serial.print(irValue);
+  Serial.print(" | Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+
+  analyzeFabric(irValue, distance);
+
+  Serial.println("-----------------------");
+  delay(500);
+}
+
+int readIRSensor() {
+  return analogRead(irReceiverPin);
+}
+
+float readUltrasonic() {
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  long duration = pulseIn(echoPin, HIGH);
+  return duration * 0.034 / 2.0;
+}
+
+void analyzeFabric(int ir, float dist) {
+  if (ir > 700 && dist < 15) {
+    Serial.println("Fabric detected - Possibly thick or wrinkled");
+  } else if (ir > 400 && dist < 20) {
+    Serial.println("Fabric detected - Possibly thin or smooth");
+  } else {
+    Serial.println("No fabric detected");
+  }
+}
