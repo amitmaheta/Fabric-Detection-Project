@@ -1,7 +1,7 @@
 
 # Fabric Detection Project - README
 
-This project is part of the SEWTS Robotics Challenge and is focused on detecting fabric smoothness and wrinkles using a combination of IR and Ultrasonic sensors.
+This project is focused on detecting fabric smoothness and wrinkles using a combination of IR and Ultrasonic sensors.
 
 ### 📂 V1/
 - **Code.txt**: Arduino code for Version 1
